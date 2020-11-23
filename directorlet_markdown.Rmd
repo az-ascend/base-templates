@@ -1,0 +1,45 @@
+---
+geometry: margin=3cm
+output:
+  html_document:
+    css: custom.css
+  pdf_document: default
+---
+```{r setup, echo=FALSE,comment=FALSE,message=FALSE}
+#Data analysis goes here
+```
+```{r functions, echo=FALSE,comment=FALSE,message=FALSE}
+#Functions go here
+```
+\
+<div style="text-align: right">
+
+![](C:\\Users\\ferrisr\\OneDrive\\z1_Research\\ABRC\\images\\ASCEND_logo.png){width=250px}
+
+`r format(Sys.time(), "%d %B, %Y")`
+
+</div>
+\
+\
+Dear __'medical.director'__
+\
+\
+Thank you for your participation in the Arizona Antibiotic Stewardship Collaborative for Evidence-based Nursing home Decisions (AZ-ASCEND). Our overall objective is to improve the appropriateness of antibiotic prescribing through evidence-based stewardship implementation. Through the use of protocols that emphasize the use of standardized infection definitions to guide culturing and prescribing practices, administrative engagement, staff education, and consistent data feedback, we aim to reduce unnecessary antibiotic prescribing - and antibiotic-associated adverse events. This letter is one of the sources of data feedback we will provide to your facility on a quarterly basis. In addition to the  report and dashboard available to your facility, this document will provide a tailored description of antibiotic prescribing practice in Devon Gables.
+\
+\
+This letter describes facility specific trends with in-line code, inserting the exact description and "change" variables being set to words such as "decrease" or "increase". For example, since __'date.time.1'__ __'facility.name'__ has __'change.1'__ the number of prescriptions failing to meet the McGeer criteria by __'perc.change.1'__%. *Note that the labels in __bold__ will simply be presented as normal text*. Additional changes are described: __'perc.change.2'%__ __'change.2'__ compared the average change of other skilled nursing facilities in this program. Since implementation of AZ-ASCEND, there have been a __'perc.change.3'__ __'change.3'__ in the number of number of urine culture and sensitivity tests ordered with clinical symptoms, resulting in a __'perc.change.4'__ __'change.4'__ in tests returning colony counts under 99,000 CFUs.
+\
+\
+Your participation in this study reduce the burden of antimicrobial resistance. Current estimates report that death from drug resistant infctions will cause more deaths annually by 2050 than any other disease, indicating a need for accountability. Thanks to the participation of you and prescribers at **'facility.name'**, we have the opportunity to improve patient outcomes, while maintaining the efficacy of the medical tools at our disposal. 
+\
+\
+Thank you,
+\
+\
+Peter Patterson, MD
+\
+Independent Contractor 
+\
+Department of Epidemiology and Biostatistics
+\
+University of Arizona 
