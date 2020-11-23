@@ -1,0 +1,89 @@
+---
+geometry: margin = .5cm
+output: html_document
+---
+```{r setup, echo=FALSE,comment=FALSE,message=FALSE, warning=F}
+library(readr)
+library(lubridate)
+library(tidyverse)
+library(tidyr)
+library(dplyr)
+library(reshape2)
+library(ggplot2)
+library(kableExtra)
+
+#Objective: This file will be used in conjunction with the ASCEND_Function_Part1 script to generate quarterly reports for each enrolled Skilled Nursing Facility (SNF). These reports are to be shared with enrolled SNF to convey various data, and provide information on total number of patients meeting clinical criteria for antibiotics prescription. 
+
+#Data: Data is in a wide format, and captures various metrics on SNF residents (patients) who had a urine culture. These results detail patient urine culture results (organism, colony count, etc.), as well as a potential antibiotic prescription (type, date prescribed, duration). Please refer to the REDCap data dictionary for more details. 
+
+#Process: Data will be completed by SNF Entry Technicians on a monthly basis. All data will be imported in a single file, and subset out three months of entries for the reporting quarter (Q1, Q2, Q3, Q4) by Entry Technician name or SNF name. Data will be cleaned and compared to other SNF averages.
+
+#Results: A final custom quarterly report will be generated into an HTML report, and subsequently converted and saved in PDF format for distribution. This script will be run for each SNF; a total of 16 SNFs are anticipated to participate in this study, so data cleaning using this script will occur 16 times. Some variations in data entry may occur and will need to be accounted for. Some code has been written to anticipate these cleaning processes. 
+  
+#Set Working directory and source
+#Source allows functions to generate in-line markdown text 
+setwd("C:/Users/ferrisr/OneDrive/z1_Research/ABRC/Data")
+source("C:/Users/ferrisr/OneDrive/z1_Research/ABRC/Code/ASCEND_Function_Part1.R")
+
+#Load dataset; note this data will build off previous quarters and will include data entries for all SNFs enrolled in this study.
+data <- read_csv("C:/Users/ferrisr/OneDrive/z1_Research/ABRC/Data/ASCEND_Dummy_Data.csv")
+
+##################
+## Data Cleaning #
+##################
+
+#Subset out facility specific data by entry technician
+data.raw1 <- subset(data, data$entry_technician == "John Doe") %>%
+  mutate(., resident_days = as.numeric(resident_days))
+
+#Replace year code with actual year (this is used for report date)
+data.raw2 <- data.raw1 %>%
+  mutate(., current_year = replace(current_year, current_year == 0, 2019)) %>%
+  mutate(., current_year = replace(current_year, current_year == 1, 2020)) %>%
+  mutate(., current_year = replace(current_year, current_year == 2, 2021))
+
+#Create new rep_date character variable to print into the report
+#Note that is will be converted to a date in functions later
+data.raw3 <- data.raw2 %>%
+  mutate(., rep_date = paste0(.$current_month,
+                              "/",
+                              1,
+                              "/",
+                              .$current_year)) %>%
+  mutate(., rep_date = as.character(.$rep_date, format = "%m/%d/%Y")) 
+
+#Apply report() function developed in function_clean.R
+data.raw4 <- report(data.raw3)
+
+
+            #THIS PROJECT
+            #Replace values with 0
+            data.raw4$Res_Days.fac.[1] <- 0
+            data.raw4$Res_Days.fac.[4] <- 0
+            data.raw4$Res_Days.fac.[5] <- 0
+            
+#Sum facility by the reporting date and number of months since the introduction of the intervention with group_by(). Sum the other rows of data with summarise_all().
+data.clean <- data.raw4 %>% 
+  group_by(fac.rep_date, matrix.apply.fac..1..m.prep..) %>% 
+  summarise_all(funs(sum)) %>% 
+  as.data.frame()
+
+names(data.clean) <- c(
+  "Reporting Month",
+  "Months since intervention start",
+  "Total Resident Days",
+  "Urine Culture Orders Stated",
+  "Antibiotic Days of Therapy",
+  "Urine C/S Tests Ordered",
+  "Urine C/S Tests with >100,000 CFUs/mL",
+  "Urine C/S Tests with >0 & <100,000 CFUs/mL",
+  "Urine C/S with any colony count",
+  "Antibiotics prescribed prior to lab result availability",
+  "Total Antibiotics Prescribed",
+  "Postive Isolates for C. Difficile Infection",
+  "Wholesale cost of Antibiotics",
+  "Urine C/S Tests Meeting Clinical Criteria",
+  "Antibiotics prescribed not meeting the McGeer Criteria",
+  "Total Patients Meeting the McGeer Criteria"
+)
+```
